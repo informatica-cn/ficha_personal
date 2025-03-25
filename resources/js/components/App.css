@@ -1,0 +1,20 @@
+/* App.css o el archivo de estilos correspondiente */
+.header-column {
+    background-color: #3DB2A0; /* Aquí puedes poner el color que desees */
+    color: white;              /* Cambiar el color del texto */
+    font-weight: bold;         /* Hacer el texto en negrita */
+}
+.btn-radius{
+    border-radius: 50%;
+}
+
+
+.btn .btn-primary {
+    background-color: #3DB2A0 !important;
+    border-color: #3DB2A0 !important;
+  }
+
+  .btn-primary:hover {
+    background-color: #369e90 !important; /* Un tono más oscuro para el hover */
+    border-color: #369e90 !important;
+  }
