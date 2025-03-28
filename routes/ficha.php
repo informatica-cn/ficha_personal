@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FichasController;
 use App\Http\Controllers\ComunaController;
+use App\Http\Controllers\RegionController;
 use Illuminate\Support\Facades\Http;
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,7 @@ Route::prefix('ficha')->group(function () {
     Route::post('', [FichasController::class, 'store']);
    /*  Route::get('/all', [FichasController::class, 'index']); */
     Route::get('', [FichasController::class, 'index'])->name('fichas.index');
+    Route::get('{id}', [FichasController::class, 'show'])->name('fichas.show');
     Route::delete('{id}', [FichasController::class, 'destroy'])->name('fichas.destroy');
     Route::put('{id}', [FichasController::class, 'update'])->name('fichas.update');
 });
@@ -28,3 +30,5 @@ Route::prefix('ficha')->group(function () {
 }); */
 
 Route::get('/comunas', [ComunaController::class, 'index']);
+
+Route::get('/regiones/{id}', [RegionController::class, 'show']);

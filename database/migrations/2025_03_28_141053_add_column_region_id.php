@@ -11,20 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('comunas', function (Blueprint $table) {
-            $table->id();
-            $table->string('nombre');
+        Schema::table('fichas', function (Blueprint $table) {
+
             $table->unsignedBigInteger('region_id')->nullable();
             $table->foreign('region_id')->references('id')->on('regiones')->onDelete('set null');
-            $table->timestamps();
+
+
+
+
+
         });
     }
+
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('comunas');
+        Schema::table('fichas', function (Blueprint $table) {
+
+            $table->dropForeign(['region_id']);
+            $table->dropColumn(['region_id']);
+
+            });
     }
 };

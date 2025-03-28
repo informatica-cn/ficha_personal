@@ -77,3 +77,31 @@ export const actualizarFicha = async (datosFicha,refreshDataById,toast,onClose) 
     }
 };
 
+
+// FichaService.js
+export const getFichaByRut = async (rut,toast) => {
+    try {
+        const response = await fetch(`/api/ficha/${rut}`);
+        if (!response.ok) {
+            // Si la respuesta no es ok, extraemos el mensaje del cuerpo de la respuesta
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Error al obtener la ficha");
+        }
+        return await response.json();
+    } catch (error) {
+
+        toast.current.show({
+            severity: "error", // Cambiar a 'error' para mensajes de error
+            summary: "Error", // Título del mensaje
+            detail: "Hubo al buscar rut.", // Detalles del error
+            life: 1000, // Tiempo de duración del mensaje
+        });
+
+
+        setTimeout(() => {
+            onClose();
+        }, 1000);
+        // Lanzamos el error para que lo maneje el frontend
+        throw error;
+    }
+};

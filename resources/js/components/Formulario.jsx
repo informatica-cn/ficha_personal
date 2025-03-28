@@ -3,17 +3,24 @@ import { Toast } from 'primereact/toast';
 import EstamentoSelect from "./EstamentoSelect";
 import GradoSelect from "./GradoSelect";
 import ComunaSelect from "./ComunaSelect";
+import RegionSelect from "./RegionSelect";
 import { customStyles } from "../css/reactSelectStyles";
-import { crearFicha } from "../services/FichaService";
+import { crearFicha, getFichaByRut } from "../services/FichaService";
+import * as rut from 'rut.js';
+import Swal from 'sweetalert2';
+
+console.log(rut);
 const Formulario = ({ refreshData, hideModal, showToast }) => {
     const [formData, setFormData] = useState({
+        rut:"",
         nombres: "",
         direccion: "",
-        comuna: "",
+        comuna_id: "",
         telefono: "",
         correo: "",
         urgencia: "",
         direccion_municipal: "",
+        block:"",
     });
     const [loading, setLoading] = useState(false);
     const toast = useRef(null);
@@ -24,11 +31,25 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
 
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name } = e.target;
+        let value = e.target.value;
+
+        if (name === "rut") {
+            value = rut.format(value);
+        }
+
         setFormData({
             ...formData,
             [name]: value,
         });
+
+        if (name === "rut") {
+            const isValid = rut.validate(value);
+            setErrors((prevErrors) => ({
+                ...prevErrors,
+                rut: isValid ? null : ["RUT inválido"],
+            }));
+        }
 
         if (name === "direccion" && value.length > 2) {
             fetchSuggestions(value);
@@ -38,15 +59,69 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
     };
 
 
+      // Validación cuando el campo "rut" pierde el foco
+      const handleRutBlur = async () => {
+        const isValid = rut.validate(formData.rut);
+        if (!isValid) {
+            // Si no es válido, limpiamos el campo
+            setFormData({ ...formData, rut: "" });
+        } else {
+            // Si es válido, hacer la consulta para obtener los datos del RUT
+            try {
+                console.log('entroo...');
+                const response = await getFichaByRut(formData.rut,toast); // Esta función consulta al backend
+                if (response) {
+                    console.log(response);
+                    setFormData({
+                        ...formData,
+                        nombres: response[0].nombres ? response[0].nombres : "",
+                        direccion: response[0].direccion ? response[0].direccion : "",
+                        direccion_municipal: response[0].direccion_municipal ? response[0].direccion_municipal : "",
+                        urgencia: response[0].urgencia ? response[0].urgencia : "",
+                        correo: response[0].correo ? response[0].correo : "",
+                        comuna_id: response[0].comuna ? response[0].comuna : "",
+                        region_id: response[0].region_id ? response[0].region_id : "",
+                        telefono: response[0].telefono ? response[0].telefono : "",
+                        grado_id: response[0].grado_id ? response[0].grado_id : "",
+                        estamento_id: response[0].estamento_id ? response[0].estamento_id : "",
+                        block: response[0].block ? response[0].block : "",
+                        // Handle other fields similarly...
+                      });
+                }
+            } catch (error) {
+                setFormData({ ...formData, rut: "" });
+                console.log('entro el error ')
+
+            }
+        }
+    };
+
     const handleSelectGradoChange = (selectedOption) => {
         console.log("Seleccionado:", selectedOption);
         setFormData({ ...formData, grado_id: selectedOption.value });
     };
 
     const handleSelectComunaChange = (selectedOption) => {
-        console.log("Seleccionado:", selectedOption);
-        setFormData({ ...formData, comuna: selectedOption.label });
+        console.log("Comuna seleccionada:", selectedOption);
+
+        // Extraemos el region_id de la comuna seleccionada
+        const regionId = selectedOption ? selectedOption.region_id : null;
+
+        setFormData({
+            ...formData,
+            comuna: selectedOption ? selectedOption.label : "",
+            region: regionId, // Guardamos el ID de la región
+        });
     };
+
+    const handleSelectRegionChange = (selectedOption) => {
+        console.log("Región seleccionada:", selectedOption);
+        setFormData({
+            ...formData,
+            region: selectedOption ? selectedOption.label : "",
+        });
+    };
+
     const handleSelectEstamentoChange = (selectedOption) => {
         console.log("Seleccionado:", selectedOption);
         setFormData({ ...formData, estamento_id: selectedOption.value });
@@ -59,13 +134,15 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
         try {
             await crearFicha(formData, refreshData, hideModal, toast);
             setFormData({
+                rut:"",
                 nombres: "",
                 direccion: "",
-                comuna: "",
+                comuna_id: "",
                 telefono: "",
                 correo: "",
                 urgencia: "",
                 direccion_municipal: "",
+                block:"",
             });
         } catch (error) {
             console.error("Error al crear la ficha:", error);
@@ -107,7 +184,7 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                 const state = item.address.state || "";
                 const number = item.address.house_number || "";
                 return {
-                    display_name: `${street} ${number} ${comune} ${state} `.trim(), // Mostrar solo calle y número
+                    display_name: `${street} ${number} ${comune} `.trim(), // Mostrar solo calle y número
                     place_id: item.place_id, // Asegúrate de tener un identificador único
                     fullData: item, // Guardamos la data completa por si la necesitas
                 };
@@ -124,7 +201,10 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
     };
 
     const handleSelect = (address) => {
-        setFormData({ ...formData, direccion: address.display_name });
+        const { road, house_number } = address.fullData.address;
+        const formattedAddress = `${road || ""} ${house_number || ""}`.trim();
+
+        setFormData({ ...formData, direccion: formattedAddress });
         setSuggestions([]); // Ocultar sugerencias después de seleccionar
     };
 
@@ -135,6 +215,23 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
             <Toast ref={toast} />
 
             <form onSubmit={handleSubmit}>
+            <div className="row">
+            <div className="col-md-12">
+                        <label htmlFor="rut" className="form-label">Rut</label>
+                        <input
+                    type="text"
+                    className={`form-control ${errors.rut ? "is-invalid" : ""}`}
+                    id="rut"
+                    name="rut"
+                    value={formData.rut}
+                    onChange={handleChange}
+                    onBlur={handleRutBlur}
+                    placeholder="Ej: 12.345.678-9"
+                />
+                {errors.rut && <small className="text-danger">{errors.rut[0]}</small>}
+
+                    </div>
+            </div>
                 <div className="row">
                     <div className="col-md-6">
                         <label htmlFor="nombre" className="form-label">Nombre Completo</label>
@@ -183,7 +280,27 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                     </div>
 
                     <div className="col-md-6">
-                        <ComunaSelect onChange={handleSelectComunaChange} />
+                        <ComunaSelect value={formData.comuna_id} onChange={handleSelectComunaChange} />
+                    </div>
+
+                    <div className="col-md-6">
+                    <RegionSelect
+                    selectedRegionId={formData.region}
+                    onChange={handleSelectRegionChange}
+                />
+                    </div>
+
+                    <div className="col-md-12">
+                    <label htmlFor="block" className="form-label">Torre / block / Depto</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="block"
+                            name="block"
+                            value={formData.block}
+                            onChange={handleChange}
+                        />
+                        {errors.nombres && <small className="text-danger">{errors.block[0]}</small>}
                     </div>
 
                     {/* <div className="col-md-6">
@@ -211,11 +328,11 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                         <input type="text" className="form-control" name="direccion_municipal" onChange={handleChange} value={formData.direccion_municipal} />
                     </div>
                     <div className="col-md-6">
-                        <GradoSelect onChange={handleSelectGradoChange} />
+                        <GradoSelect  value={formData.grado_id} onChange={handleSelectGradoChange} />
                     </div>
                     <div className="col-md-6">
 
-                        <EstamentoSelect onChange={handleSelectEstamentoChange} />
+                        <EstamentoSelect  value={formData.estamento_id} onChange={handleSelectEstamentoChange} />
                     </div>
 
 
@@ -234,7 +351,7 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                     </div>
 
                     <div className="col-md-6">
-                        <label htmlFor="correo" className="form-label">Correo Electrónico</label>
+                        <label htmlFor="correo" className="form-label">Correo particular</label>
                         <input
                             type="email"
                             className="form-control"

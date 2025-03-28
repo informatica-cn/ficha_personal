@@ -23,7 +23,7 @@ class FichasController extends Controller
                 'fichas.id',
                 'fichas.nombres',
                 'fichas.direccion',
-                'fichas.comuna',
+                'fichas.comuna_id',
                 'fichas.telefono',
                 'fichas.correo',
                 'fichas.urgencia',
@@ -99,9 +99,60 @@ class FichasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+
+        //value label
+        $fichas = Ficha::select(
+            'fichas.id',
+            'fichas.nombres',
+            'fichas.direccion',
+            'fichas.comuna_id',
+            'fichas.telefono',
+            'fichas.correo',
+            'fichas.block',
+            'fichas.urgencia',
+            'fichas.direccion_municipal',
+            'comunas.nombre as comuna_nombre',
+            'grados.nombre as grado',      // Obtener el nombre del grado
+            'grados.id as grado_id',
+            'estamentos.nombre as estamento', // Obtener el nombre del estamento
+            'estamentos.id as estamento_id'
+        )
+        ->leftJoin('grados', 'grados.id', '=', 'fichas.grado_id') // Unir con la tabla grados
+        ->leftJoin('estamentos', 'estamentos.id', '=', 'fichas.estamento_id') // Unir con la tabla estamentos
+        ->leftJoin('comunas', 'comunas.id', '=', 'fichas.comuna_id')
+
+        ->where('rut',$id)
+        ->get();
+
+        if ($fichas->isEmpty()) {
+            return response()->json(['message' => 'No se encontró ningún registro con el RUT proporcionado.'], 404);
+        }
+
+        $result = $fichas->map(function ($ficha) {
+            return [
+                'id' => $ficha->id,
+                'nombres' => $ficha->nombres,
+                'direccion' => $ficha->direccion,
+                'comuna' => [
+                    'value' => $ficha->comuna_id,   // ID de la comuna
+                    'label' => $ficha->comuna_nombre // Nombre de la comuna
+                ],
+                'telefono' => $ficha->telefono,
+                'correo' => $ficha->correo,
+                'block' => $ficha->block,
+                'urgencia' => $ficha->urgencia,
+                'direccion_municipal' => $ficha->direccion_municipal,
+                'grado' => $ficha->grado,
+                'grado_id' => $ficha->grado_id,
+                'estamento' => $ficha->estamento,
+                'estamento_id' => $ficha->estamento_id,
+            ];
+        });
+
+        return response()->json($result);
+
     }
 
     /**

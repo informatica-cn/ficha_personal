@@ -10,9 +10,12 @@ export const fetchComunas = async () => {
         }
         const data = await response.json();
 
+
+
         return data.map((comuna) => ({
-            value: comuna.codigo, // Identificador único
-            label: comuna.nombre, // Nombre a mostrar en el select
+            value: comuna.id,
+            label: comuna.nombre,
+            region_id: comuna.region_id, // Asegurar que venga el region_id
         }));
     } catch (error) {
         console.error("Error en fetchComunas:", error);
