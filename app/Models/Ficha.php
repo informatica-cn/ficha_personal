@@ -13,6 +13,7 @@ class Ficha extends Model
     protected $table = 'fichas';
 
     protected $fillable = [
+        'rut',
         'nombres',
         'direccion',
         'telefono',
@@ -21,7 +22,9 @@ class Ficha extends Model
         'direccion_municipal',
         'estamento_id',
         'grado_id',
-        'comuna'
+        'comuna_id',
+        'block',
+        'declaracion'
     ];
 
     protected $dates = ['deleted_at'];

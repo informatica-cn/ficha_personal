@@ -4,37 +4,33 @@ import { fetchComunas } from "../services/comunaService";
 import { customStyles } from "../css/reactSelectStyles";
 
 const ComunaSelect = ({ value, onChange, disabled }) => {
+
+    /*    console.log(value) */
+
     const [comunas, setComunas] = useState([]);
-    const [selectedOption, setSelectedOption] = useState(null);
 
     useEffect(() => {
         const loadComunas = async () => {
             const data = await fetchComunas();
             setComunas(data);
         };
-
         loadComunas();
     }, []);
 
-     const selectedOptionValue = comunas.find((option) => option.label == value);
-
-
     const handleChange = (selected) => {
-        setSelectedOption(selected);
+        /*  console.log(selected); */
         if (onChange) {
-            onChange(selected);
+            onChange(selected); // Enviamos la comuna con su region_id
         }
     };
-
-
 
     return (
         <div className="mb-3">
             <label className="form-label">Comuna</label>
             <Select
                 name="comuna"
+                value={value}
                 options={comunas}
-                value={selectedOptionValue}
                 onChange={handleChange}
                 placeholder="Seleccione una comuna"
                 styles={customStyles}

@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('fichas', function (Blueprint $table) {
             $table->id();
             $table->string('nombres');
-            $table->string('direccion');
-            $table->string('telefono');
+            $table->string('direccion')->nullable();
+            $table->string('telefono')->nullable();
             $table->string('correo')->unique();
-            $table->string('urgencia');
+            $table->string('urgencia')->nullable();
             $table->softDeletes(); // Agrega soporte para eliminación suave
             $table->timestamps();
         });

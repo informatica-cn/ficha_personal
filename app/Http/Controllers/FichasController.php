@@ -19,11 +19,12 @@ class FichasController extends Controller
             }
 
             return response()->json(['message' => 'Método no permitido'], 405); */
-            $fichas = Ficha::select(
+         /*    $fichas = Ficha::select(
                 'fichas.id',
                 'fichas.nombres',
                 'fichas.direccion',
-                'fichas.comuna',
+                'fichas.rut',
+                'fichas.comuna_id',
                 'fichas.telefono',
                 'fichas.correo',
                 'fichas.urgencia',
@@ -37,7 +38,62 @@ class FichasController extends Controller
             ->leftJoin('estamentos', 'estamentos.id', '=', 'fichas.estamento_id') // Unir con la tabla estamentos
             ->get();
 
-            return response()->json($fichas);
+            return response()->json($fichas); */
+            $fichas = Ficha::select(
+                'fichas.id',
+                'fichas.nombres',
+                'fichas.direccion',
+                'fichas.rut',
+                'fichas.comuna_id',
+                'fichas.region_id',
+                'fichas.telefono',
+                'fichas.correo',
+                'fichas.block',
+                'fichas.declaracion',
+                'fichas.urgencia',
+                'fichas.direccion_municipal',
+                'comunas.nombre as comuna_nombre',
+                'regiones.nombre as region_nombre',
+                'grados.nombre as grado',
+                'grados.id as grado_id',
+                'estamentos.nombre as estamento',
+                'estamentos.id as estamento_id'
+            )
+            ->leftJoin('grados', 'grados.id', '=', 'fichas.grado_id')
+            ->leftJoin('estamentos', 'estamentos.id', '=', 'fichas.estamento_id')
+            ->leftJoin('comunas', 'comunas.id', '=', 'fichas.comuna_id')
+            ->leftJoin('regiones', 'regiones.id', '=', 'fichas.region_id')
+
+            ->get();
+
+            $result = $fichas->map(function ($ficha) {
+                return [
+                    'id' => $ficha->id,
+                    'nombres' => $ficha->nombres,
+                    'rut'=>$ficha->rut,
+                    'direccion' => $ficha->direccion,
+                    'comuna' => [
+                        'value' => $ficha->comuna_id,
+                        'label' => $ficha->comuna_nombre
+                    ],
+                    'region' => [
+                        'value' => $ficha->region_id,
+                        'label' => $ficha->region_nombre
+                    ],
+                    'telefono' => $ficha->telefono,
+                    'correo' => $ficha->correo,
+                    'block' => $ficha->block,
+                    'declaracion' => $ficha->declaracion,
+                    'urgencia' => $ficha->urgencia,
+                    'direccion_municipal' => $ficha->direccion_municipal,
+                    'grado' => $ficha->grado,
+                    'grado_id' => $ficha->grado_id,
+                    'estamento' => $ficha->estamento,
+                    'estamento_id' => $ficha->estamento_id,
+                ];
+            });
+
+            return response()->json($result);
         }
 
 
@@ -46,6 +102,7 @@ class FichasController extends Controller
             // Validar los datos del formulario
             $messages = [
                 'nombres.required' => 'El nombre es obligatorio.',
+                'declaracion.required' => 'El campo declaracio es requerido.',
                 'nombres.string' => 'El nombre debe ser un texto.',
                 'direccion.required' => 'La dirección es obligatoria.',
                 'telefono.required' => 'El teléfono es obligatorio.',
@@ -59,6 +116,8 @@ class FichasController extends Controller
             // Validar los datos del formulario con los mensajes personalizados
             $validator = Validator::make($request->all(), [
                 'nombres' => 'required|string|max:255',
+                'declaracion' => 'required',
+
                 'direccion' => 'required|string|max:255',
                 'telefono' => 'required|string|max:20',
                 'correo' => 'required|email|max:255|unique:fichas,correo',
@@ -99,9 +158,71 @@ class FichasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+
+
+        //value label
+        $fichas = Ficha::select(
+            'fichas.id',
+            'fichas.nombres',
+            'fichas.direccion',
+            'fichas.comuna_id',
+            'fichas.telefono',
+            'fichas.correo',
+            'fichas.block',
+            'fichas.declaracion',
+            'fichas.urgencia',
+            'fichas.region_id',
+            'fichas.direccion_municipal',
+            'comunas.nombre as comuna_nombre',
+            'regiones.nombre as region_nombre',
+            'grados.nombre as grado',      // Obtener el nombre del grado
+            'grados.id as grado_id',
+            'estamentos.nombre as estamento', // Obtener el nombre del estamento
+            'estamentos.id as estamento_id'
+        )
+        ->leftJoin('grados', 'grados.id', '=', 'fichas.grado_id') // Unir con la tabla grados
+        ->leftJoin('estamentos', 'estamentos.id', '=', 'fichas.estamento_id') // Unir con la tabla estamentos
+        ->leftJoin('comunas', 'comunas.id', '=', 'fichas.comuna_id')
+        ->leftJoin('regiones', 'regiones.id', '=', 'fichas.region_id')
+
+        ->where('rut',str_replace('.', '',$id))
+        ->get();
+
+        if ($fichas->isEmpty()) {
+            return response()->json(['message' => 'No se encontró ningún registro con el RUT proporcionado.'], 404);
+        }
+
+        $result = $fichas->map(function ($ficha) {
+            return [
+                'id' => $ficha->id,
+                'rut'=>$ficha->rut,
+                'nombres' => $ficha->nombres,
+                'direccion' => $ficha->direccion,
+                'declaracion'=>$ficha->declaracion,
+                'comuna' => [
+                    'value' => $ficha->comuna_id,   // ID de la comuna
+                    'label' => $ficha->comuna_nombre // Nombre de la comuna
+                ],
+                'region' => [
+                    'value' => $ficha->region_id,   // ID de la comuna
+                    'label' => $ficha->region_nombre // Nombre de la comuna
+                ],
+                'telefono' => $ficha->telefono,
+                'correo' => $ficha->correo,
+                'block' => $ficha->block,
+                'urgencia' => $ficha->urgencia,
+                'direccion_municipal' => $ficha->direccion_municipal,
+                'grado' => $ficha->grado,
+                'grado_id' => $ficha->grado_id,
+                'estamento' => $ficha->estamento,
+                'estamento_id' => $ficha->estamento_id,
+            ];
+        });
+
+        return response()->json($result);
+
     }
 
     /**
@@ -115,15 +236,41 @@ class FichasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
+
+
         // Validar los datos de entrada
         $validator = Validator::make($request->all(), [
             'nombres' => 'required|string|max:255',
+            'rut' => 'required|string|max:255',
             'direccion' => 'required|string|max:255',
             'telefono' => 'required|string|max:20',
             'correo' => 'required|email|max:255',
             'urgencia' => 'nullable|string|max:255',
+        ], [
+            'nombres.required' => 'El campo nombres es obligatorio.',
+            'nombres.string' => 'El campo nombres debe ser una cadena de texto.',
+            'nombres.max' => 'El campo nombres no puede tener más de 255 caracteres.',
+
+            'rut.required' => 'El campo RUT es obligatorio.',
+            'rut.string' => 'El campo RUT debe ser una cadena de texto.',
+            'rut.max' => 'El campo RUT no puede tener más de 255 caracteres.',
+
+            'direccion.required' => 'El campo dirección es obligatorio.',
+            'direccion.string' => 'El campo dirección debe ser una cadena de texto.',
+            'direccion.max' => 'El campo dirección no puede tener más de 255 caracteres.',
+
+            'telefono.required' => 'El campo teléfono es obligatorio.',
+            'telefono.string' => 'El campo teléfono debe ser una cadena de texto.',
+            'telefono.max' => 'El campo teléfono no puede tener más de 20 caracteres.',
+
+            'correo.required' => 'El campo correo es obligatorio.',
+            'correo.email' => 'El campo correo debe ser una dirección de correo válida.',
+            'correo.max' => 'El campo correo no puede tener más de 255 caracteres.',
+
+            'urgencia.string' => 'El campo urgencia debe ser una cadena de texto.',
+            'urgencia.max' => 'El campo urgencia no puede tener más de 255 caracteres.',
         ]);
 
         // Si la validación falla, devolver errores
@@ -134,27 +281,41 @@ class FichasController extends Controller
             ], 422);
         }
 
+
         try {
             // Buscar la ficha a actualizar
-            $ficha = Ficha::findOrFail($id);
+            $ficha = Ficha::where('rut',str_replace('.', '',$request->rut))->first();
+
+            if (!$ficha) {
+                return response()->json([
+                    'message' => 'Ficha no encontrada',
+                ], 404);
+            }
+
+
 
             // Actualizar los datos
-            $ficha->update([
-                'nombres' => $request->nombres,
-                'direccion' => $request->direccion,
-                'comuna'=>$request->comuna,
-                'telefono' => $request->telefono,
-                'correo' => $request->correo,
-                'urgencia' => $request->urgencia,
-                'direccion_municipal' => $request->direccion_municipal,
-                'grado_id' => $request->grado_id,
-                'estamento_id' => $request->estamento_id,
-            ]);
-            $fichaActualizada = Ficha::select(
+            // Actualizar los datos
+       $ficha->nombres = $request->nombres;
+        $ficha->direccion = $request->direccion;
+          $ficha->comuna_id = $request->comuna_id['value'];
+       $ficha->block = $request->block;
+         $ficha->region_id = $request->region_id['value'];
+        $ficha->telefono = $request->telefono;
+        $ficha->correo = $request->correo;
+        $ficha->urgencia = $request->urgencia;
+        $ficha->direccion_municipal = $request->direccion_municipal;
+        $ficha->grado_id = $request->grado_id;
+        $ficha->estamento_id = $request->estamento_id;
+        $ficha->declaracion = $request->declaracion;
+
+        // Guardar la ficha actualizada
+        $ficha->save();
+         /*    $fichaActualizada = Ficha::select(
                 'fichas.id',
                 'fichas.nombres',
                 'fichas.direccion',
-                'fichas.comuna',
+                'fichas.comuna_id',
                 'fichas.telefono',
                 'fichas.correo',
                 'fichas.urgencia',
@@ -166,8 +327,67 @@ class FichasController extends Controller
             )
             ->leftJoin('grados', 'grados.id', '=', 'fichas.grado_id')
             ->leftJoin('estamentos', 'estamentos.id', '=', 'fichas.estamento_id')
-            ->where('fichas.id', $id)
+            ->where('fichas.rut',str_replace('.', '',$request->rut))
             ->first(); // Obtener solo la ficha actualizada
+ */
+
+ $fichas = Ficha::select(
+    'fichas.id',
+    'fichas.nombres',
+    'fichas.direccion',
+    'fichas.comuna_id',
+    'fichas.telefono',
+    'fichas.correo',
+    'fichas.block',
+    'fichas.declaracion',
+    'fichas.urgencia',
+    'fichas.region_id',
+    'fichas.direccion_municipal',
+    'comunas.nombre as comuna_nombre',
+    'regiones.nombre as region_nombre',
+    'grados.nombre as grado',      // Obtener el nombre del grado
+    'grados.id as grado_id',
+    'estamentos.nombre as estamento', // Obtener el nombre del estamento
+    'estamentos.id as estamento_id'
+)
+->leftJoin('grados', 'grados.id', '=', 'fichas.grado_id') // Unir con la tabla grados
+->leftJoin('estamentos', 'estamentos.id', '=', 'fichas.estamento_id') // Unir con la tabla estamentos
+->leftJoin('comunas', 'comunas.id', '=', 'fichas.comuna_id')
+->leftJoin('regiones', 'regiones.id', '=', 'fichas.region_id')
+
+->where('rut',str_replace('.', '',str_replace('.', '',$request->rut)))
+->get();
+
+if ($fichas->isEmpty()) {
+    return response()->json(['message' => 'No se encontró ningún registro con el RUT proporcionado.'], 404);
+}
+
+$fichaActualizada = $fichas->map(function ($ficha) {
+    return [
+        'id' => $ficha->id,
+        'rut'=>$ficha->rut,
+        'nombres' => $ficha->nombres,
+        'direccion' => $ficha->direccion,
+        'declaracion'=>$ficha->declaracion,
+        'comuna' => [
+            'value' => $ficha->comuna_id,   // ID de la comuna
+            'label' => $ficha->comuna_nombre // Nombre de la comuna
+        ],
+        'region' => [
+            'value' => $ficha->region_id,   // ID de la comuna
+            'label' => $ficha->region_nombre // Nombre de la comuna
+        ],
+        'telefono' => $ficha->telefono,
+        'correo' => $ficha->correo,
+        'block' => $ficha->block,
+        'urgencia' => $ficha->urgencia,
+        'direccion_municipal' => $ficha->direccion_municipal,
+        'grado' => $ficha->grado,
+        'grado_id' => $ficha->grado_id,
+        'estamento' => $ficha->estamento,
+        'estamento_id' => $ficha->estamento_id,
+    ];
+});
 
             // Retornar la ficha actualizada
             return response()->json([

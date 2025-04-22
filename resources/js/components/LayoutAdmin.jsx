@@ -1,11 +1,11 @@
 import React, { useState, useEffect,useRef } from 'react';
-import FormularioUpdate from './FormularioUpdate';
+import Formulario from './Formulario';
 import ListarFormulario from './ListarFormulario';
 import axios from 'axios';
 import { Dialog } from 'primereact/dialog';
 import { Toast } from 'primereact/toast';
 
-const Layout = () => {
+const LayoutAdmin = () => {
     const [data, setData] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const toast = useRef(null);
@@ -50,12 +50,27 @@ const Layout = () => {
     return (
         <div className="pt-5">
             <h1 className="text-center">Declaración jurada antecedentes</h1>
-           <div className="container mb-5">
-           <FormularioUpdate refreshData={refreshData} hideModal={hideModal} toast={toast} />
+           <div className="mb-5">
+           <Dialog
+                header="Declaración jurada antecedentes"
+                visible={isModalVisible}
+                onHide={hideModal}
+                breakpoints={{ '960px': '75vw', '640px': '100vw' }}
+                style={{ width: '50vw' }}
+            >
+                <Formulario refreshData={refreshData} hideModal={hideModal} toast={toast} />
+            </Dialog>
            </div>
-
+            <ListarFormulario
+                data={data}
+                fetchFichas={fetchFichas}
+                showModal={showModal}
+                refreshDataById={refreshDataById}
+            />
         </div>
     );
 };
 
-export default Layout;
+export default LayoutAdmin;
+
+

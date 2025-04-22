@@ -10,12 +10,19 @@ export const fetchComunas = async () => {
         }
         const data = await response.json();
 
-        return data.map((comuna) => ({
-            value: comuna.codigo, // Identificador único
-            label: comuna.nombre, // Nombre a mostrar en el select
-        }));
+
+
+        return data.map((comuna) => {
+            /*    console.log("Comuna Data:", comuna); */ // Verifica los datos de la comuna
+            return {
+                value: comuna.id,
+                label: comuna.nombre,
+                region_id: comuna.region_id, // Asegurar que venga el region_id
+                region_name: comuna.region.nombre,
+            };
+        });
     } catch (error) {
-        console.error("Error en fetchComunas:", error);
+        /*   console.error("Error en fetchComunas:", error); */
         return []; // Retorna un array vacío en caso de error
     }
 };
