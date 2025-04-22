@@ -60,6 +60,7 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
     };
 
 
+
     // Validación cuando el campo "rut" pierde el foco
     const handleRutBlur = async () => {
         const isValid = rut.validate(formData.rut);
@@ -129,6 +130,8 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
             region: selectedOption ? selectedOption.label : "",
         });
     };
+
+
 
     const handleSelectEstamentoChange = (selectedOption) => {
         console.log("Seleccionado:", selectedOption);
@@ -238,6 +241,12 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
                                     value={formData.rut}
                                     onChange={handleChange}
                                     onBlur={handleRutBlur}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            handleRutBlur();
+                                        }
+                                    }}
                                     placeholder="Ej: 12.345.678-9"
                                 />
                                 {errors.rut && <small className="text-danger">{errors.rut[0]}</small>}

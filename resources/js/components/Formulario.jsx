@@ -237,6 +237,12 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                                     value={formData.rut}
                                     onChange={handleChange}
                                     onBlur={handleRutBlur}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            e.preventDefault();
+                                            handleRutBlur();
+                                        }
+                                    }}
                                     placeholder="Ej: 12.345.678-9"
                                 />
                                 {errors.rut && <small className="text-danger">{errors.rut[0]}</small>}
