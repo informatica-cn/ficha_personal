@@ -399,7 +399,7 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                                         onChange={(e) => setFormData({ ...formData, miCheckbox: e.target.checked })}
                                     />
                                     <label className="form-check-label" htmlFor="miCheckbox">
-                                        Acepto los términos y condiciones
+                                        Declaro que la información proporcionada es completa y fidedigna, siendo de mi responsabilidad cualquier omisión o falsedad en lo informado en el presente acto
                                     </label>
                                 </div>
                             </div>
