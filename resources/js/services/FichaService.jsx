@@ -1,4 +1,5 @@
 export const crearFicha = async (formData, refreshData, hideModal, toast) => {
+
     try {
         const response = await fetch("/api/ficha", {
             method: "POST",
@@ -40,24 +41,36 @@ export const crearFicha = async (formData, refreshData, hideModal, toast) => {
     }
 };
 
-
-export const actualizarFicha = async (datosFicha,refreshDataById,toast,onClose) => {
+export const actualizarFicha = async (datosFicha, refreshDataById, onClose, toast, setErrors) => {
     try {
-        const response = await fetch(`/api/ficha/${datosFicha.id}`, {
+        const response = await fetch(`/api/ficha`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datosFicha),
         });
 
+        console.log('Respuesta recibida:', response);
+
         if (!response.ok) {
             const result = await response.json();
+            console.log('Error con response.ok false:', result);
             if (result.errors) {
                 setErrors(result.errors);
+                return;
             }
-            throw new Error('Error al actualizar la ficha');
+            throw new Error(result.message || "Error al actualizar la ficha");
         }
 
-        const result = await response.json();
+        let result;
+        try {
+            result = await response.json();
+        } catch (jsonError) {
+            console.error("Error al parsear el JSON:", jsonError);
+            throw new Error("Respuesta del servidor no es JSON válido.");
+        }
+
+        console.log('Resultado OK:', result);
+
         if (result.ficha) {
             refreshDataById(result.ficha);
         }
@@ -73,13 +86,14 @@ export const actualizarFicha = async (datosFicha,refreshDataById,toast,onClose) 
             onClose();
         }, 1000);
     } catch (error) {
-        console.error("Error al actualizar la ficha:", error);
+        console.log('Entró al catch con error:', error.message);
     }
 };
 
 
+
 // FichaService.js
-export const getFichaByRut = async (rut,toast) => {
+export const getFichaByRut = async (rut, toast) => {
     try {
         const response = await fetch(`/api/ficha/${rut}`);
         if (!response.ok) {

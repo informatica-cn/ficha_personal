@@ -23,7 +23,8 @@ class Ficha extends Model
         'estamento_id',
         'grado_id',
         'comuna_id',
-        'block'
+        'block',
+        'declaracion'
     ];
 
     protected $dates = ['deleted_at'];

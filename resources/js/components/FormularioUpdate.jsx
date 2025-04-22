@@ -5,12 +5,12 @@ import GradoSelect from "./GradoSelect";
 import ComunaSelect from "./ComunaSelect";
 import RegionSelect from "./RegionSelect";
 import { customStyles } from "../css/reactSelectStyles";
-import { crearFicha, getFichaByRut } from "../services/FichaService";
+import { actualizarFicha, crearFicha, getFichaByRut } from "../services/FichaService";
 import * as rut from 'rut.js';
 import Swal from 'sweetalert2';
 
 
-const Formulario = ({ refreshData, hideModal, showToast }) => {
+const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
     const [formData, setFormData] = useState({
         rut: "",
         nombres: "",
@@ -21,7 +21,7 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
         urgencia: "",
         direccion_municipal: "",
         block: "",
-        declaro: ""
+        declaracion: ""
     });
     const [loading, setLoading] = useState(false);
     const toast = useRef(null);
@@ -72,7 +72,7 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                 console.log('entroo...');
                 const response = await getFichaByRut(formData.rut, toast); // Esta función consulta al backend
                 if (response) {
-                    console.log(response);
+                    console.log(response[0].comuna);
                     setFormData({
                         ...formData,
                         nombres: response[0].nombres ? response[0].nombres : "",
@@ -140,7 +140,7 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
         setErrors({});
 
         try {
-            await crearFicha(formData, refreshData, hideModal, toast);
+            await actualizarFicha(formData, refreshData, hideModal, toast, setErrors);
             setFormData({
                 rut: "",
                 nombres: "",
@@ -151,7 +151,8 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                 urgencia: "",
                 direccion_municipal: "",
                 block: "",
-                declaro: ""
+                declaro: "",
+                declaracion: ""
             });
         } catch (error) {
             console.error("Error al crear la ficha:", error);
@@ -224,8 +225,8 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
             <Toast ref={toast} />
 
             <form onSubmit={handleSubmit}>
-                <div class="card">
-                    <div class="card-body">
+                <div className="card">
+                    <div className="card-body">
                         <div className="row">
                             <div className="col-md-12">
                                 <label htmlFor="rut" className="form-label">Rut</label>
@@ -253,7 +254,9 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                                     name="nombres"
                                     value={formData.nombres}
                                     onChange={handleChange}
+                                    disabled={true}
                                 />
+
                                 {errors.nombres && <small className="text-danger">{errors.nombres[0]}</small>}
                             </div>
 
@@ -291,11 +294,11 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                             </div>
 
                             <div className="col-md-6">
-
                                 <ComunaSelect value={formData.comuna_id} onChange={handleSelectComunaChange} />
                             </div>
 
                             <div className="col-md-6">
+
                                 <RegionSelect
                                     value={formData.region_id}
                                     selectedRegionId={formData.region}
@@ -313,7 +316,7 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                                     value={formData.block}
                                     onChange={handleChange}
                                 />
-                                {errors.nombres && <small className="text-danger">{errors.block[0]}</small>}
+                                {errors.block && <small className="text-danger">{errors.block[0]}</small>}
                             </div>
 
                             {/* <div className="col-md-6">
@@ -338,14 +341,14 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
 
                             <div className="col-md-6">
                                 <label htmlFor="direccion" className="form-label">Dirección municipal</label>
-                                <input type="text" className="form-control" name="direccion_municipal" onChange={handleChange} value={formData.direccion_municipal} />
+                                <input type="text" className="form-control" name="direccion_municipal" onChange={handleChange} value={formData.direccion_municipal} disabled={true} />
                             </div>
                             <div className="col-md-6">
-                                <GradoSelect value={formData.grado_id} onChange={handleSelectGradoChange} />
+                                <GradoSelect value={formData.grado_id} onChange={handleSelectGradoChange} disabled={true} />
                             </div>
                             <div className="col-md-6">
 
-                                <EstamentoSelect value={formData.estamento_id} onChange={handleSelectEstamentoChange} />
+                                <EstamentoSelect value={formData.estamento_id} onChange={handleSelectEstamentoChange} disabled={true} />
                             </div>
 
 
@@ -393,10 +396,10 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                                     <input
                                         type="checkbox"
                                         className="form-check-input"
-                                        id="declaro"
-                                        name="declaro"
-                                        checked={formData.miCheckbox}
-                                        onChange={(e) => setFormData({ ...formData, miCheckbox: e.target.checked })}
+                                        id="declaracion"
+                                        name="declaracion"
+                                        checked={formData.declaracion}
+                                        onChange={(e) => setFormData({ ...formData, declaracion: e.target.checked })}
                                     />
                                     <label className="form-check-label" htmlFor="miCheckbox">
                                         Acepto los términos y condiciones
@@ -421,4 +424,4 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
     );
 };
 
-export default Formulario;
+export default FormularioUpdate;

@@ -11,14 +11,14 @@ export const fetchRegiones = async (parametro = "") => {
         }
         const data = await response.json();
 
-        console.log('datos de la region',data);
+        /*  console.log('datos de la region',data); */
 
         return {
             value: data.id, // Identificador único
             label: data.nombre, // Nombre de la región
         };
     } catch (error) {
-        console.error("Error en fetchComunas:", error);
+        /* console.error("Error en fetchComunas:", error); */
         return []; // Retorna un array vacío en caso de error
     }
 };

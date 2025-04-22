@@ -24,4 +24,9 @@ class Comuna extends Model
 
     // Si no deseas que Laravel gestione las columnas created_at y updated_at, desactívalas
     public $timestamps = true;
+
+    public function region()
+    {
+        return $this->belongsTo(Region::class, 'region_id');
+    }
 }

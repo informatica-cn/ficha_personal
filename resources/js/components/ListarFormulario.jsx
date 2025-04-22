@@ -76,15 +76,15 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
                     // Obtener los datos de la respuesta
                     const data = await response.json();
 
-            /*         console.log(data);
- */
+                    /*         console.log(data);
+         */
                     if (data.id) {
                         // Filtrar los datos para eliminar el elemento con el id retornado
-                       /*  console.log("Antes de eliminar:", tableData); */
+                        /*  console.log("Antes de eliminar:", tableData); */
                         setTableData((prevData) => {
-                     /*        console.log("El id a eliminar ", data.id) */
+                            /*        console.log("El id a eliminar ", data.id) */
                             const newData = prevData.filter(item => item.id !== Number(data.id));
-                       /*      console.log("Después de eliminar:", newData); */
+                            /*      console.log("Después de eliminar:", newData); */
                             return newData;
                         });
 
@@ -101,10 +101,10 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
     };
 
     const handleEdit = (ficha) => {
-       /*  console.log('fichaaaa.', ficha) */
+        /*  console.log('fichaaaa.', ficha) */
 
         setSelectedFicha(ficha);
-/*         console.log('estado de la ficha', selectedFicha); */
+        /*         console.log('estado de la ficha', selectedFicha); */
         setShowEditModal(true); // Muestra el modal de edición
     };
 
@@ -140,6 +140,7 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
                 stripedRows
             >
                 <Column field="id" header="ID" sortable headerClassName="header-column" />
+                <Column field="rut" header="Rut" sortable headerClassName="header-column" />
                 <Column field="nombres" header="Nombre" sortable headerClassName="header-column" />
                 <Column field="direccion" header="Dirección" sortable headerClassName="header-column" />
                 <Column field="telefono" header="Teléfono" sortable headerClassName="header-column" />
@@ -175,7 +176,7 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
                     ficha={selectedFicha}
                     onClose={() => setShowEditModal(false)}
                     onUpdate={(updatedFicha) => {
-                       /*  console.log(updatedFicha); */
+                        /*  console.log(updatedFicha); */
                         setTableData((prevData) =>
                             prevData.map((item) => (item.id === updatedFicha.id ? updatedFicha : item))
                         );

@@ -15,7 +15,7 @@ class ComunaController extends Controller
     public function index()
     {
         // Obtener todas las comunas
-        $comunas = Comuna::all();
+        $comunas = Comuna::with('region')->get();
 
         // Retornar las comunas en formato JSON
         return response()->json($comunas);

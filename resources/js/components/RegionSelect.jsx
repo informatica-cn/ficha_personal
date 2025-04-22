@@ -3,14 +3,15 @@ import Select from "react-select";
 import { fetchRegiones } from "../services/regionService";
 import { customStyles } from "../css/reactSelectStyles";
 
-const RegionSelect = ({ selectedRegionId, onChange, disabled }) => {
+const RegionSelect = ({ value, selectedRegionId, onChange, disabled }) => {
+    /*  console.log(value) */
     const [regiones, setRegiones] = useState([]);
 
     useEffect(() => {
         const loadRegiones = async () => {
             if (selectedRegionId) {
                 const data = await fetchRegiones(selectedRegionId);
-                console.log('region..', data);
+                /*    console.log('region..', data); */
                 setRegiones(data ? [data] : []); // Convertimos en array si hay datos
             } else {
                 setRegiones([]);
@@ -23,6 +24,7 @@ const RegionSelect = ({ selectedRegionId, onChange, disabled }) => {
             <label className="form-label">Región</label>
             <Select
                 name="region"
+                value={value}
                 options={regiones}
                 onChange={onChange}
                 placeholder="Seleccione una región"

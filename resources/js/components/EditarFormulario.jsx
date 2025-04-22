@@ -3,11 +3,12 @@ import { Toast } from 'primereact/toast';
 import GradoSelect from "./GradoSelect";
 import EstamentoSelect from "./EstamentoSelect";
 import ComunaSelect from "./ComunaSelect";
+import RegionSelect from "./RegionSelect";
 import { actualizarFicha } from "../services/FichaService";
 import Swal from 'sweetalert2';
 const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
 
-
+    /*  console.log(ficha) */
     const [formData, setFormData] = useState({ ...ficha });
 
     const [showAlert, setShowAlert] = useState(false);
@@ -21,11 +22,14 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
 
     useEffect(() => {
         if (ficha) {
+            /*   console.log(ficha) */
 
             setFormData({
                 ...ficha,
                 grado_id: ficha.grado_id || null,
                 estamento_id: ficha.estamento_id || null,
+                comuna_id: ficha.comuna || null,
+                region_id: ficha.region || null
             });
         }
     }, [ficha]);
@@ -50,16 +54,40 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
         }));
     };
     const handleSelectEstamentoChange = (selectedOption) => {
-        console.log("Seleccionado:", selectedOption);
+        /* console.log("Seleccionado:", selectedOption); */
         setFormData((prevState) => ({
             ...prevState,
             estamento_id: selectedOption ? selectedOption.value : null,
         }));
     };
 
+    const handleSelectRegionChange = (selectedOption) => {
+        /*  console.log("Región seleccionada:", selectedOption); */
+        setFormData({
+            ...formData,
+            region: selectedOption ? selectedOption.label : "",
+        });
+    };
+
     const handleSelectComunaChange = (selectedOption) => {
-        console.log("Seleccionado:", selectedOption);
-        setFormData({ ...formData, comuna: selectedOption.label });
+        /*  console.log("Comuna seleccionada:", selectedOption); */
+
+        // Extraemos el region_id de la comuna seleccionada
+        const regionId = { value: selectedOption.region_id, label: selectedOption.region_name };
+
+        const comunaId = { value: selectedOption.value, label: selectedOption.label };
+
+
+
+
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            comuna_id: comunaId ? comunaId : "",
+            region_id: regionId, // Guardamos el ID de la región
+        }));
+
+
+        /* console.log('form', formData) */
     };
 
 
@@ -72,13 +100,13 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
             const data = await response.json();
 
             if (data.length === 0) {
-               /*  alert('no se encontraron resultados'); */
-               toast.current.show({
-                severity: "warn",
-                summary: "Error",
-                detail: "Dirección no encontrada!",
-                life: 2000,
-            });
+                /*  alert('no se encontraron resultados'); */
+                toast.current.show({
+                    severity: "warn",
+                    summary: "Error",
+                    detail: "Dirección no encontrada!",
+                    life: 2000,
+                });
                 //setShowAlert(true);
                 setFormData({ ...formData, direccion: "" }); // Limpia el campo de dirección
                 setSuggestions([]);
@@ -109,7 +137,7 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
 
             setSuggestions(formattedSuggestions);
         } catch (error) {
-            console.error("Error al obtener sugerencias:", error);
+            /*  console.error("Error al obtener sugerencias:", error); */
         } finally {
             setLoading(false);
         }
@@ -138,7 +166,7 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
         setErrors({});
         setLoading(true);
 
-        await actualizarFicha(formData,refreshDataById,toast,onClose); // Llamando la función que viene por prop
+        await actualizarFicha(formData, refreshDataById, onClose, toast, setErrors); // Llamando la función que viene por prop
 
         setLoading(false);
     };
@@ -147,6 +175,22 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
             <Toast ref={toast} />
             <form onSubmit={handleSubmit}>
                 <div className="row">
+                    <div className="col-md-12">
+                        <label htmlFor="rut" className="form-label">Rut</label>
+                        <input
+                            type="text"
+                            className={`form-control ${errors.rut ? "is-invalid" : ""}`}
+                            id="rut"
+                            name="rut"
+                            value={formData.rut}
+
+
+                            placeholder="Ej: 12.345.678-9"
+                            disabled={true}
+                        />
+
+
+                    </div>
                     <div className="col-md-6">
                         <label htmlFor="nombre" className="form-label">Nombre Completo</label>
                         <input type="text" className="form-control" id="nombre" name="nombres" value={formData.nombres} onChange={handleChange} disabled={true} />
@@ -169,7 +213,18 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
                     </div>
 
                     <div className="col-md-6">
-                        <ComunaSelect value={formData.comuna} onChange={handleSelectComunaChange} disabled={false} />
+
+                        <ComunaSelect value={formData.comuna} onChange={handleSelectComunaChange} />
+
+                    </div>
+
+                    <div className="col-md-6">
+
+                        <RegionSelect
+                            value={formData.region_id}
+                            selectedRegionId={formData.region}
+                            onChange={handleSelectRegionChange}
+                        />
                     </div>
 
 

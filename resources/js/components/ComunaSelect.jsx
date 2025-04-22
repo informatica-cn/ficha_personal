@@ -3,7 +3,10 @@ import Select from "react-select";
 import { fetchComunas } from "../services/comunaService";
 import { customStyles } from "../css/reactSelectStyles";
 
-const ComunaSelect = ({ value,onChange, disabled }) => {
+const ComunaSelect = ({ value, onChange, disabled }) => {
+
+    /*    console.log(value) */
+
     const [comunas, setComunas] = useState([]);
 
     useEffect(() => {
@@ -15,6 +18,7 @@ const ComunaSelect = ({ value,onChange, disabled }) => {
     }, []);
 
     const handleChange = (selected) => {
+        /*  console.log(selected); */
         if (onChange) {
             onChange(selected); // Enviamos la comuna con su region_id
         }

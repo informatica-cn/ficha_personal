@@ -22,7 +22,7 @@ Route::prefix('ficha')->group(function () {
     Route::get('', [FichasController::class, 'index'])->name('fichas.index');
     Route::get('{id}', [FichasController::class, 'show'])->name('fichas.show');
     Route::delete('{id}', [FichasController::class, 'destroy'])->name('fichas.destroy');
-    Route::put('{id}', [FichasController::class, 'update'])->name('fichas.update');
+    Route::put('', [FichasController::class, 'update'])->name('fichas.update');
 });
 /* Route::get('/comunas', function () {
     $response = Http::get('https://apis.digital.gob.cl/dpa/comunas');
@@ -32,3 +32,8 @@ Route::prefix('ficha')->group(function () {
 Route::get('/comunas', [ComunaController::class, 'index']);
 
 Route::get('/regiones/{id}', [RegionController::class, 'show']);
+
+
+Route::get('/admin', function () {
+    return view('admin');
+});
