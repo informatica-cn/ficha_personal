@@ -8,7 +8,8 @@ import { Dialog } from 'primereact/dialog';
 import EditarFormulario from './EditarFormulario';
 import './App.css'; // Asegúrate de importar tu archivo de estilos
 
-
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 const ListarFormulario = ({ data, showModal, refreshDataById }) => {
     const [first, setFirst] = useState(0); // Control del primer elemento de la página
     const [rows, setRows] = useState(10);  // Cantidad de filas por página
@@ -30,6 +31,17 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
     const showToast = (severityValue, summaryValue, detailValue) => {
         myToast.current.show({ severity: severityValue, summary: summaryValue, detail: detailValue });
     }
+
+
+    const exportExcel = () => {
+        const worksheet = XLSX.utils.json_to_sheet(tableData); // tus datos
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Fichas");
+
+        const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+        const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+        saveAs(dataBlob, 'fichas.xlsx');
+    };
 
 
 
@@ -112,23 +124,26 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
         <div className="container ">
             <Toast ref={myToast} />
 
-            <div className="row">
-                <div className="mb-3 col-md-10">
-
+            <div className="row align-items-center mb-3">
+                <div className="col-md-8">
                     <InputText
                         className="form-control"
                         value={globalFilter}
                         onChange={onGlobalFilterChange}
                         placeholder="Buscar en toda la tabla..."
                     />
-
                 </div>
-                <div className="col-md-2 text-end">
-                    <button className='btn btn-success' onClick={showModal}>
+                <div className="col-md-4 d-flex gap-3">
+                    <button className="btn btn-success" onClick={showModal}>
                         Agregar
+                    </button>
+
+                    <button className="btn btn-success" onClick={exportExcel}>
+                        Exportar Excel
                     </button>
                 </div>
             </div>
+
             <DataTable
                 value={tableData}
                 paginator
