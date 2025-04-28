@@ -50,7 +50,9 @@ class FichasController extends Controller
                 'fichas.correo',
                 'fichas.block',
                 'fichas.declaracion',
-                'fichas.urgencia',
+                'fichas.urgencia_nombre',
+                'fichas.urgencia_telefono',
+
                 'fichas.direccion_municipal',
                 'comunas.nombre as comuna_nombre',
                 'regiones.nombre as region_nombre',
@@ -84,7 +86,8 @@ class FichasController extends Controller
                     'correo' => $ficha->correo,
                     'block' => $ficha->block,
                     'declaracion' => $ficha->declaracion,
-                    'urgencia' => $ficha->urgencia,
+                    'urgencia_nombre' => $ficha->urgencia_nombre,
+                    'urgencia_telefono' => $ficha->urgencia_telefono,
                     'direccion_municipal' => $ficha->direccion_municipal,
                     'grado' => $ficha->grado,
                     'grado_id' => $ficha->grado_id,
@@ -140,7 +143,8 @@ class FichasController extends Controller
             'comuna'=>$request->comuna,
             'telefono' => $request->telefono,
             'correo' => $request->correo,
-            'urgencia' => $request->urgencia,
+            'urgencia_nombre' => $request->urgencia_nombre,
+            'urgencia_telefono' => $request->urgencia_telefono,
             'estamento_id'=>$request->estamento_id,
             'grado_id'=>$request->grado_id,
             'direccion_municipal'=>$request->direccion_municipal
@@ -172,7 +176,8 @@ class FichasController extends Controller
             'fichas.correo',
             'fichas.block',
             'fichas.declaracion',
-            'fichas.urgencia',
+            'fichas.urgencia_nombre',
+            'fichas.urgencia_telefono',
             'fichas.region_id',
             'fichas.direccion_municipal',
             'comunas.nombre as comuna_nombre',
@@ -212,7 +217,8 @@ class FichasController extends Controller
                 'telefono' => $ficha->telefono,
                 'correo' => $ficha->correo,
                 'block' => $ficha->block,
-                'urgencia' => $ficha->urgencia,
+                'urgencia_nombre' => $ficha->urgencia_nombre,
+                'urgencia_telefono' => $ficha->urgencia_telefono,
                 'direccion_municipal' => $ficha->direccion_municipal,
                 'grado' => $ficha->grado,
                 'grado_id' => $ficha->grado_id,
@@ -247,7 +253,8 @@ class FichasController extends Controller
             'direccion' => 'required|string|max:255',
             'telefono' => 'required|string|max:20',
             'correo' => 'required|email|max:255',
-            'urgencia' => 'nullable|string|max:255',
+            'urgencia_nombre' => 'nullable|string|max:255',
+            'urgencia_telefono' => 'nullable|string|max:255',
         ], [
             'nombres.required' => 'El campo nombres es obligatorio.',
             'nombres.string' => 'El campo nombres debe ser una cadena de texto.',
@@ -269,8 +276,11 @@ class FichasController extends Controller
             'correo.email' => 'El campo correo debe ser una dirección de correo válida.',
             'correo.max' => 'El campo correo no puede tener más de 255 caracteres.',
 
-            'urgencia.string' => 'El campo urgencia debe ser una cadena de texto.',
-            'urgencia.max' => 'El campo urgencia no puede tener más de 255 caracteres.',
+            'urgencia_nombre.string' => 'El campo urgencia nombre debe ser una cadena de texto.',
+            'urgencia_nombre.max' => 'El campo urgencia nombre no puede tener más de 255 caracteres.',
+
+            'urgencia_telefono.string' => 'El campo urgencia telefono debe ser una cadena de texto.',
+            'urgencia_telefono.max' => 'El campo urgencia telefono no puede tener más de 255 caracteres.',
         ]);
 
         // Si la validación falla, devolver errores
@@ -303,7 +313,8 @@ class FichasController extends Controller
          $ficha->region_id = $request->region_id['value'];
         $ficha->telefono = $request->telefono;
         $ficha->correo = $request->correo;
-        $ficha->urgencia = $request->urgencia;
+        $ficha->urgencia_nombre = $request->urgencia_nombre;
+        $ficha->urgencia_telefono = $request->urgencia_telefono;
         $ficha->direccion_municipal = $request->direccion_municipal;
         $ficha->grado_id = $request->grado_id;
         $ficha->estamento_id = $request->estamento_id;
@@ -340,7 +351,8 @@ class FichasController extends Controller
     'fichas.correo',
     'fichas.block',
     'fichas.declaracion',
-    'fichas.urgencia',
+    'fichas.urgencia_nombre',
+    'fichas.urgencia_telefono',
     'fichas.region_id',
     'fichas.direccion_municipal',
     'comunas.nombre as comuna_nombre',
@@ -380,7 +392,8 @@ $fichaActualizada = $fichas->map(function ($ficha) {
         'telefono' => $ficha->telefono,
         'correo' => $ficha->correo,
         'block' => $ficha->block,
-        'urgencia' => $ficha->urgencia,
+        'urgencia_nombre' => $ficha->urgencia_nombre,
+        'urgencia_telefono' => $ficha->urgencia_telefono,
         'direccion_municipal' => $ficha->direccion_municipal,
         'grado' => $ficha->grado,
         'grado_id' => $ficha->grado_id,

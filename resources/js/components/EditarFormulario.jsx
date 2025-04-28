@@ -6,6 +6,9 @@ import ComunaSelect from "./ComunaSelect";
 import RegionSelect from "./RegionSelect";
 import { actualizarFicha } from "../services/FichaService";
 import Swal from 'sweetalert2';
+
+/* Formulario modal administrador */
+
 const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
 
     /*  console.log(ficha) */
@@ -169,6 +172,7 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
         await actualizarFicha(formData, refreshDataById, onClose, toast, setErrors); // Llamando la función que viene por prop
 
         setLoading(false);
+        window.location.reload();
     };
     return (
         <div className="container-fluid">
@@ -252,9 +256,38 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
                         {errors.correo && <small className="text-danger">{errors.correo[0]}</small>}
                     </div>
                     <div className="col-md-12">
-                        <label htmlFor="urgencia" className="form-label">En caso de urgencia avisar a</label>
-                        <textarea className="form-control" id="urgencia" name="urgencia" value={formData.urgencia} onChange={handleChange}></textarea>
-                        {errors.urgencia && <small className="text-danger">{errors.urgencia[0]}</small>}
+                        <div className="row pt-3">
+                            <div className="col-m-12">
+                                <b> En caso de urgencia avisar a</b>
+                            </div>
+                        </div>
+                        <div className="row pt-2">
+                            <div className="col-md-6">
+                                <label htmlFor="urgencia_nombre" className="form-label">Nombre</label>
+                                <input type="text" className="form-control"
+                                    id="urgencia_nombre"
+                                    name="urgencia_nombre"
+                                    value={formData.urgencia_nombre}
+                                    onChange={handleChange} />
+                            </div>
+                            <div className="col-md-6">
+                                <label htmlFor="urgencia_telefono" className="form-label">Télefono</label>
+                                <input type="text" className="form-control"
+                                    id="urgencia_telefono"
+                                    name="urgencia_telefono"
+                                    value={formData.urgencia_telefono}
+                                    onChange={handleChange} />
+                            </div>
+                        </div>
+                        {/*    <label htmlFor="urgencia" className="form-label">En caso de urgencia avisar a</label>
+                                <textarea
+                                    className="form-control"
+                                    id="urgencia"
+                                    name="urgencia"
+                                    value={formData.urgencia}
+                                    onChange={handleChange}
+                                ></textarea> */}
+                        {/* {errors.urgencia && <small className="text-danger">{errors.urgencia[0]}</small>} */}
                     </div>
                     <div className="row pt-2">
                         <div className="col-md-2">

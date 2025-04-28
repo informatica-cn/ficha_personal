@@ -72,6 +72,7 @@ export const actualizarFicha = async (datosFicha, refreshDataById, onClose, toas
         console.log('Resultado OK:', result);
 
         if (result.ficha) {
+            console.log(result.ficha);
             refreshDataById(result.ficha);
         }
 

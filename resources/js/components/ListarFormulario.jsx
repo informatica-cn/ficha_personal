@@ -176,14 +176,16 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
                     ficha={selectedFicha}
                     onClose={() => setShowEditModal(false)}
                     onUpdate={(updatedFicha) => {
-                        /*  console.log(updatedFicha); */
+                        // Actualiza el estado local
                         setTableData((prevData) =>
                             prevData.map((item) => (item.id === updatedFicha.id ? updatedFicha : item))
                         );
+                        // Actualiza el estado global
+                        refreshDataById(updatedFicha);
+                        // Cierra el modal
                         setShowEditModal(false);
                     }}
                     refreshDataById={refreshDataById}
-
                 />
             </Dialog>
         </div>

@@ -8,7 +8,7 @@ import { customStyles } from "../css/reactSelectStyles";
 import { actualizarFicha, crearFicha, getFichaByRut } from "../services/FichaService";
 import * as rut from 'rut.js';
 import Swal from 'sweetalert2';
-
+/* Formulario del funcionario */
 
 const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
     const [formData, setFormData] = useState({
@@ -18,7 +18,8 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
         comuna_id: "",
         telefono: "",
         correo: "",
-        urgencia: "",
+        urgencia_nombre: "",
+        urgencia_telefono: "",
         direccion_municipal: "",
         block: "",
         declaracion: ""
@@ -79,7 +80,8 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
                         nombres: response[0].nombres ? response[0].nombres : "",
                         direccion: response[0].direccion ? response[0].direccion : "",
                         direccion_municipal: response[0].direccion_municipal ? response[0].direccion_municipal : "",
-                        urgencia: response[0].urgencia ? response[0].urgencia : "",
+                        urgencia_nombre: response[0].urgencia_nombre ? response[0].urgencia_nombre : "",
+                        urgencia_telefono: response[0].urgencia_telefono ? response[0].urgencia_telefono : "",
                         correo: response[0].correo ? response[0].correo : "",
                         comuna_id: response[0].comuna ? response[0].comuna : "",
                         region_id: response[0].region ? response[0].region : "",
@@ -151,7 +153,8 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
                 comuna_id: "",
                 telefono: "",
                 correo: "",
-                urgencia: "",
+                urgencia_nombre: "",
+                urgencia_telefono: "",
                 direccion_municipal: "",
                 block: "",
                 declaro: "",
@@ -389,15 +392,38 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
                             </div>
 
                             <div className="col-md-12">
-                                <label htmlFor="urgencia" className="form-label">En caso de urgencia avisar a</label>
+                                <div className="row pt-3">
+                                    <div className="col-m-12">
+                                        <b> En caso de urgencia avisar a</b>
+                                    </div>
+                                </div>
+                                <div className="row pt-2">
+                                    <div className="col-md-6">
+                                        <label htmlFor="urgencia_nombre" className="form-label">Nombre</label>
+                                        <input type="text" className="form-control"
+                                            id="urgencia_nombre"
+                                            name="urgencia_nombre"
+                                            value={formData.urgencia_nombre}
+                                            onChange={handleChange} />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <label htmlFor="urgencia_telefono" className="form-label">Télefono</label>
+                                        <input type="text" className="form-control"
+                                            id="urgencia_telefono"
+                                            name="urgencia_telefono"
+                                            value={formData.urgencia_telefono}
+                                            onChange={handleChange} />
+                                    </div>
+                                </div>
+                                {/*    <label htmlFor="urgencia" className="form-label">En caso de urgencia avisar a</label>
                                 <textarea
                                     className="form-control"
                                     id="urgencia"
                                     name="urgencia"
                                     value={formData.urgencia}
                                     onChange={handleChange}
-                                ></textarea>
-                                {errors.urgencia && <small className="text-danger">{errors.urgencia[0]}</small>}
+                                ></textarea> */}
+                                {/* {errors.urgencia && <small className="text-danger">{errors.urgencia[0]}</small>} */}
                             </div>
 
                             <div className="col-md-12 pt-3 mb-3">
