@@ -252,9 +252,9 @@ class FichasController extends Controller
 
             'telefono.required' => 'El campo teléfono es obligatorio.',
 
-            'telefono.number.numeric' => 'El campo teléfono debe ser solo número.',
-'telefono.number.min' => 'El campo teléfono debe tener al menos 5 dígitos.',
-            'telefono.max' => 'El campo teléfono no puede tener más de 20 caracteres.',
+            'telefono.numeric' => 'El campo teléfono debe ser solo número.',
+'telefono.min' => 'El campo teléfono debe tener al menos 5 dígitos.',
+
 
             'correo.required' => 'El campo correo es obligatorio.',
             'correo.email' => 'El campo correo debe ser una dirección de correo válida.',
@@ -266,7 +266,7 @@ class FichasController extends Controller
 
             'urgencia_telefono.required' => 'El campo telefono  es obligatorio.',
         'urgencia_telefono.numeric' => 'El campo teléfono debe ser solo número.',
-'urgencia_telefono.number.min' => 'El campo teléfono debe tener al menos 5 dígitos.',
+'urgencia_telefono.min' => 'El campo teléfono debe tener al menos 5 dígitos.',
 
             'declaracion.required' => 'El campo declaracion es obligatorio.',
         ]);
