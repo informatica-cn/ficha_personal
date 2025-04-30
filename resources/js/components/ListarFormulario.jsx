@@ -163,7 +163,7 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
                 <Column field="direccion_municipal" header="Dirección municipal" sortable headerClassName="header-column" />
                 <Column field="grado" header="Grado" sortable headerClassName="header-column" />
                 <Column field="estamento" header="Estamento" sortable headerClassName="header-column" />
-                <Column field="fecha_actualizacion" header="Fecha envió" sortable headerClassName="header-column" style={{ width: '160px' }} />
+                <Column field="fecha_actualizacion" header="Fecha envió" sortable headerClassName="header-column" style={{ width: '260px' }} />
                 <Column
                     headerClassName="header-column"
                     header="Acciones"
