@@ -388,7 +388,7 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                             <div className="col-md-12">
                                 <div className="row pt-3">
                                     <div className="col-m-12">
-                                        <b> En caso de urgencia avisar a</b>
+                                        <b> En caso de emergencia avisar a</b>
                                     </div>
                                 </div>
                                 <div className="row pt-2">
