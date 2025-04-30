@@ -65,6 +65,7 @@ class FichasController extends Controller
             ->leftJoin('estamentos', 'estamentos.id', '=', 'fichas.estamento_id')
             ->leftJoin('comunas', 'comunas.id', '=', 'fichas.comuna_id')
             ->leftJoin('regiones', 'regiones.id', '=', 'fichas.region_id')
+            ->whereNotNull('updated_at')
 
             ->get();
 
