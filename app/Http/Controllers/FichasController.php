@@ -231,7 +231,7 @@ class FichasController extends Controller
             'nombres' => 'required|string|max:255',
             'rut' => 'required|string|max:255',
             'direccion' => 'required|string|max:255',
-           'telefono.number' => 'required|numeric|min:8',
+           'telefono' => 'required|numeric|min:8',
             'correo' => 'required|email|max:255',
             'urgencia_nombre' => 'required|string|max:255',
             'urgencia_telefono' => 'required|numeric|min:8',
