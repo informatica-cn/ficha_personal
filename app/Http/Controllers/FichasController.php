@@ -265,7 +265,7 @@ class FichasController extends Controller
             'urgencia_nombre.max' => 'El campo urgencia nombre no puede tener más de 255 caracteres.',
 
             'urgencia_telefono.required' => 'El campo telefono  es obligatorio.',
-        'urgencia_telefono.number.numeric' => 'El campo teléfono debe ser solo número.',
+        'urgencia_telefono.numeric' => 'El campo teléfono debe ser solo número.',
 'urgencia_telefono.number.min' => 'El campo teléfono debe tener al menos 5 dígitos.',
 
             'declaracion.required' => 'El campo declaracion es obligatorio.',
