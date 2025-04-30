@@ -151,7 +151,7 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
                 first={first}
                 onPage={onPageChange}
                 globalFilter={globalFilter}
-                tableStyle={{ minWidth: '50rem' }}
+                tableStyle={{ minWidth: '70rem' }}
                 stripedRows
             >
                 <Column field="id" header="ID" sortable headerClassName="header-column" />
