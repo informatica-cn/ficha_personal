@@ -146,7 +146,7 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
 
         try {
             await actualizarFicha(formData, refreshData, hideModal, toast, setErrors);
-            setFormData({
+           /*  setFormData({
                 rut: "",
                 nombres: "",
                 direccion: "",
@@ -159,7 +159,7 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
                 block: "",
                 declaro: "",
                 declaracion: ""
-            });
+            }); */
         } catch (error) {
             console.error("Error al crear la ficha:", error);
             setErrors(error); // Capturar errores del backend
