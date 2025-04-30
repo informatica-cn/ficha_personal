@@ -405,6 +405,7 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
                                             name="urgencia_nombre"
                                             value={formData.urgencia_nombre}
                                             onChange={handleChange} />
+                                        {errors.urgencia_nombre && <small className="text-danger">{errors.urgencia_nombre[0]}</small>}
                                     </div>
                                     <div className="col-md-6">
                                         <label htmlFor="urgencia_telefono" className="form-label">Télefono</label>
@@ -413,6 +414,7 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
                                             name="urgencia_telefono"
                                             value={formData.urgencia_telefono}
                                             onChange={handleChange} />
+                                        {errors.urgencia_telefono && <small className="text-danger">{errors.urgencia_telefono[0]}</small>}
                                     </div>
                                 </div>
                                 {/*    <label htmlFor="urgencia" className="form-label">En caso de urgencia avisar a</label>
@@ -439,6 +441,7 @@ const FormularioUpdate = ({ refreshData, hideModal, showToast }) => {
                                     <label className="form-check-label" htmlFor="miCheckbox">
                                         Declaro que la información proporcionada es completa y fidedigna, siendo de mi responsabilidad cualquier omisión o falsedad en lo informado en el presente acto
                                     </label>
+                                    {errors.declaracion && <small className="text-danger">{errors.declaracion[0]}</small>}
                                 </div>
                             </div>
 

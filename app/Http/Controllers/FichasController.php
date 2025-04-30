@@ -115,6 +115,8 @@ class FichasController extends Controller
                 'correo.email' => 'El correo electrónico debe tener un formato válido.',
                 'correo.unique' => 'El correo electrónico ya está registrado en el sistema.',
                /*  'urgencia.required' => 'El campo urgencia es obligatorio.', */
+
+
             ];
 
             // Validar los datos del formulario con los mensajes personalizados
@@ -254,8 +256,10 @@ class FichasController extends Controller
             'direccion' => 'required|string|max:255',
             'telefono' => 'required|string|max:20',
             'correo' => 'required|email|max:255',
-            'urgencia_nombre' => 'nullable|string|max:255',
-            'urgencia_telefono' => 'nullable|string|max:255',
+            'urgencia_nombre' => 'required|string|max:255',
+            'urgencia_telefono' => 'required|string|max:255',
+            'declaracion' => 'required|string|max:255',
+
         ], [
             'nombres.required' => 'El campo nombres es obligatorio.',
             'nombres.string' => 'El campo nombres debe ser una cadena de texto.',
@@ -277,11 +281,15 @@ class FichasController extends Controller
             'correo.email' => 'El campo correo debe ser una dirección de correo válida.',
             'correo.max' => 'El campo correo no puede tener más de 255 caracteres.',
 
+            'urgencia_nombre.required' => 'El campo  nombre es obligatorio.',
             'urgencia_nombre.string' => 'El campo urgencia nombre debe ser una cadena de texto.',
             'urgencia_nombre.max' => 'El campo urgencia nombre no puede tener más de 255 caracteres.',
 
+            'urgencia_telefono.required' => 'El campo telefono  es obligatorio.',
             'urgencia_telefono.string' => 'El campo urgencia telefono debe ser una cadena de texto.',
             'urgencia_telefono.max' => 'El campo urgencia telefono no puede tener más de 255 caracteres.',
+
+            'declaracion.required' => 'El campo declaracion es obligatorio.',
         ]);
 
         // Si la validación falla, devolver errores
