@@ -14,31 +14,7 @@ class FichasController extends Controller
     public function index(Request $request)
     {
 
-        /*     if ($request->ajax()) {
-                return DataTables::of(Ficha::query())->make(true);
-            }
 
-            return response()->json(['message' => 'Método no permitido'], 405); */
-         /*    $fichas = Ficha::select(
-                'fichas.id',
-                'fichas.nombres',
-                'fichas.direccion',
-                'fichas.rut',
-                'fichas.comuna_id',
-                'fichas.telefono',
-                'fichas.correo',
-                'fichas.urgencia',
-                'fichas.direccion_municipal',
-                'grados.nombre as grado',      // Obtener el nombre del grado
-                'grados.id as grado_id',
-                'estamentos.nombre as estamento', // Obtener el nombre del estamento
-                'estamentos.id as estamento_id'
-            )
-            ->leftJoin('grados', 'grados.id', '=', 'fichas.grado_id') // Unir con la tabla grados
-            ->leftJoin('estamentos', 'estamentos.id', '=', 'fichas.estamento_id') // Unir con la tabla estamentos
-            ->get();
-
-            return response()->json($fichas); */
             $fichas = Ficha::select(
                 'fichas.id',
                 'fichas.nombres',
@@ -52,7 +28,7 @@ class FichasController extends Controller
                 'fichas.declaracion',
                 'fichas.urgencia_nombre',
                 'fichas.urgencia_telefono',
-
+                'fichas.updated_at',
                 'fichas.direccion_municipal',
                 'comunas.nombre as comuna_nombre',
                 'regiones.nombre as region_nombre',
@@ -90,6 +66,7 @@ class FichasController extends Controller
                     'urgencia_nombre' => $ficha->urgencia_nombre,
                     'urgencia_telefono' => $ficha->urgencia_telefono,
                     'direccion_municipal' => $ficha->direccion_municipal,
+                    'fecha_actualizacion' => \Carbon\Carbon::parse($ficha->updated_at)->format('d-m-Y H:i'),
                     'grado' => $ficha->grado,
                     'grado_id' => $ficha->grado_id,
                     'estamento' => $ficha->estamento,
