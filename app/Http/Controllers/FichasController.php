@@ -51,7 +51,7 @@ class FichasController extends Controller
                 'fichas.block',
                 'fichas.declaracion',
                 'fichas.urgencia_nombre',
-                'fichas.urgencia_telefono',
+                'v.urgencia_telefono',
 
                 'fichas.direccion_municipal',
                 'comunas.nombre as comuna_nombre',
@@ -65,7 +65,7 @@ class FichasController extends Controller
             ->leftJoin('estamentos', 'estamentos.id', '=', 'fichas.estamento_id')
             ->leftJoin('comunas', 'comunas.id', '=', 'fichas.comuna_id')
             ->leftJoin('regiones', 'regiones.id', '=', 'fichas.region_id')
-            ->whereNotNull('updated_at')
+            ->whereNotNull('fichas.updated_at')
 
             ->get();
 
