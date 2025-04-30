@@ -121,7 +121,7 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
     };
 
     return (
-        <div className="container ">
+        <div className="container-fluid ">
             <Toast ref={myToast} />
 
             <div className="row align-items-center mb-3">
