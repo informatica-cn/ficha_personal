@@ -231,11 +231,11 @@ class FichasController extends Controller
             'nombres' => 'required|string|max:255',
             'rut' => 'required|string|max:255',
             'direccion' => 'required|string|max:255',
-            'telefono' => 'required|string|max:20',
+           'telefono.number' => 'required|numeric|min:8',
             'correo' => 'required|email|max:255',
             'urgencia_nombre' => 'required|string|max:255',
-            'urgencia_telefono' => 'required|string|max:255',
-            'declaracion' => 'required|string|max:255',
+            'urgencia_telefono' => 'required|numeric|min:8',
+            'declaracion' => 'required|max:255',
 
         ], [
             'nombres.required' => 'El campo nombres es obligatorio.',
@@ -251,7 +251,9 @@ class FichasController extends Controller
             'direccion.max' => 'El campo dirección no puede tener más de 255 caracteres.',
 
             'telefono.required' => 'El campo teléfono es obligatorio.',
-            'telefono.string' => 'El campo teléfono debe ser una cadena de texto.',
+
+            'telefono.number.numeric' => 'El campo teléfono debe ser solo número.',
+'telefono.number.min' => 'El campo teléfono debe tener al menos 5 dígitos.',
             'telefono.max' => 'El campo teléfono no puede tener más de 20 caracteres.',
 
             'correo.required' => 'El campo correo es obligatorio.',
@@ -263,8 +265,8 @@ class FichasController extends Controller
             'urgencia_nombre.max' => 'El campo urgencia nombre no puede tener más de 255 caracteres.',
 
             'urgencia_telefono.required' => 'El campo telefono  es obligatorio.',
-            'urgencia_telefono.string' => 'El campo urgencia telefono debe ser una cadena de texto.',
-            'urgencia_telefono.max' => 'El campo urgencia telefono no puede tener más de 255 caracteres.',
+        'urgencia_telefono.number.numeric' => 'El campo teléfono debe ser solo número.',
+'urgencia_telefono.number.min' => 'El campo teléfono debe tener al menos 5 dígitos.',
 
             'declaracion.required' => 'El campo declaracion es obligatorio.',
         ]);

@@ -202,17 +202,14 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
                     </div>
                     <div className="col-md-6" style={{ position: 'relative' }}>
                         <label htmlFor="direccion" className="form-label">Dirección Particular</label>
-                        {loading && <div className="mt-1 text-primary">Cargando direcciones...</div>}
-                        {suggestions.length > 0 && !loading && (
-                            <ul className="list-group mt-1" style={{ position: 'absolute', width: '100%', top: '100%', left: 0, zIndex: 10 }}>
-                                {suggestions.map((s) => (
-                                    <li key={s.place_id} className="list-group-item list-group-item-action" onClick={() => handleSelect(s)} style={{ cursor: "pointer" }}>
-                                        {s.display_name}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
-                        <input type="text" className="form-control" id="direccion" name="direccion" value={formData.direccion} onChange={handleChange} placeholder="Escribe una dirección..." />
+                        <input
+                            type="text"
+                            className="form-control"
+                            id="direccion"
+                            name="direccion"
+                            value={formData.direccion}
+                            onChange={handleChange}
+                        />
                         {errors.direccion && <small className="text-danger">{errors.direccion[0]}</small>}
                     </div>
 
