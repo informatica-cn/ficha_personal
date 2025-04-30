@@ -51,7 +51,7 @@ class FichasController extends Controller
                 'fichas.block',
                 'fichas.declaracion',
                 'fichas.urgencia_nombre',
-                'v.urgencia_telefono',
+                'fichas.urgencia_telefono',
 
                 'fichas.direccion_municipal',
                 'comunas.nombre as comuna_nombre',
