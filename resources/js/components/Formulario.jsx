@@ -283,6 +283,7 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                             <div className="col-md-6">
 
                                 <ComunaSelect value={formData.comuna_id} onChange={handleSelectComunaChange} />
+                                {errors.comuna_id && <small className="text-danger">{errors.comuna_id[0]}</small>}
                             </div>
 
                             <div className="col-md-6">
@@ -291,6 +292,7 @@ const Formulario = ({ refreshData, hideModal, showToast }) => {
                                     selectedRegionId={formData.region}
                                     onChange={handleSelectRegionChange}
                                 />
+                                {errors.region_id && <small className="text-danger">{errors.region_id[0]}</small>}
                             </div>
 
                             <div className="col-md-12">

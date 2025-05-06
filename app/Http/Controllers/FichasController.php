@@ -85,12 +85,16 @@ class FichasController extends Controller
                 'nombres.required' => 'El nombre es obligatorio.',
                 'declaracion.required' => 'El campo declaracio es requerido.',
                 'nombres.string' => 'El nombre debe ser un texto.',
+                'comuna_id' => 'required',
+                'region_id' => 'required',
                 'direccion.required' => 'La dirección es obligatoria.',
                 'telefono.required' => 'El teléfono es obligatorio.',
                 'telefono.max' => 'El teléfono no debe superar los 20 caracteres.',
                 'correo.required' => 'El correo electrónico es obligatorio.',
                 'correo.email' => 'El correo electrónico debe tener un formato válido.',
                 'correo.unique' => 'El correo electrónico ya está registrado en el sistema.',
+                'comuna_id.required' => 'El campo comuna es obligatorio.',
+'region_id.required' => 'El campo region es obligatorio.',
                /*  'urgencia.required' => 'El campo urgencia es obligatorio.', */
 
 
@@ -231,6 +235,8 @@ class FichasController extends Controller
             'nombres' => 'required|string|max:255',
             'rut' => 'required|string|max:255',
             'direccion' => 'required|string|max:255',
+            'comuna_id' => 'required',
+            'region_id' => 'required',
            'telefono' => 'required|numeric|min:8',
             'correo' => 'required|email|max:255',
             'urgencia_nombre' => 'required|string|max:255',
@@ -256,6 +262,8 @@ class FichasController extends Controller
 'telefono.min' => 'El campo teléfono debe tener al menos 5 dígitos.',
 
 
+'comuna_id.required' => 'El campo comuna es obligatorio.',
+'region_id.required' => 'El campo region es obligatorio.',
             'correo.required' => 'El campo correo es obligatorio.',
             'correo.email' => 'El campo correo debe ser una dirección de correo válida.',
             'correo.max' => 'El campo correo no puede tener más de 255 caracteres.',

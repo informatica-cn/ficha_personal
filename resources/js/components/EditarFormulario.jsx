@@ -216,6 +216,7 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
                     <div className="col-md-6">
 
                         <ComunaSelect value={formData.comuna} onChange={handleSelectComunaChange} />
+                        {errors.comuna_id && <small className="text-danger">{errors.comuna_id[0]}</small>}
 
                     </div>
 
@@ -226,6 +227,7 @@ const EditarFormulario = ({ ficha, onClose, onUpdate, refreshDataById }) => {
                             selectedRegionId={formData.region}
                             onChange={handleSelectRegionChange}
                         />
+                        {errors.region_id && <small className="text-danger">{errors.region_id[0]}</small>}
                     </div>
 
 
