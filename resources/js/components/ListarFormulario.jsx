@@ -34,7 +34,14 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
 
 
     const exportExcel = () => {
-        const worksheet = XLSX.utils.json_to_sheet(tableData); // tus datos
+
+        const exportData = tableData.map((item) => ({
+            ...item,
+            region: item.region?.label || '',
+            comuna: item.comuna?.label || ''
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(exportData); // tus datos
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Fichas");
 
@@ -157,7 +164,11 @@ const ListarFormulario = ({ data, showModal, refreshDataById }) => {
                 <Column field="id" header="ID" sortable headerClassName="header-column" />
                 <Column field="rut" header="Rut" sortable headerClassName="header-column" />
                 <Column field="nombres" header="Nombre" sortable headerClassName="header-column" />
+
                 <Column field="direccion" header="Dirección" sortable headerClassName="header-column" />
+                <Column field="region.label" header="Región" sortable headerClassName="header-column" />
+                <Column field="comuna.label" header="Comuna" sortable headerClassName="header-column" />
+
                 <Column field="telefono" header="Teléfono" sortable headerClassName="header-column" />
                 <Column field="correo" header="Correo" sortable headerClassName="header-column" />
                 <Column field="direccion_municipal" header="Dirección municipal" sortable headerClassName="header-column" />
